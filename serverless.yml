@@ -1,0 +1,88 @@
+service:
+  name: serverless-typescript
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+  - serverless-dynamodb-local
+
+custom:
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+    migration:
+      dir: offline/migrations
+    stages:
+      - dev
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  environment:
+    DYNAMODB_TABLE: ${self:service.name}-${opt:stage, self:provider.stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+
+functions:
+  index:
+    handler: handler/todo.list
+    events:
+      - http:
+          method: get
+          path: todos
+          cors: true
+  create:
+    handler: handler/todo.create
+    events:
+      - http:
+          method: post
+          path: todos
+          cors: true
+  read:
+    handler: handler/todo.read
+    events:
+      - http:
+          method: get
+          path: todos/{id}
+          cors: true
+  update:
+    handler: handler/todo.update
+    events:
+      - http:
+          path: todos/{id}
+          method: put
+          cors: true
+  delete:
+    handler: handler/todo.deleteTodo
+    events:
+      - http:
+          path: todos/{id}
+          method: delete
+          cors: true
+
+resources:
+  Resources:
+    TodosDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
