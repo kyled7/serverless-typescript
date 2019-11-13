@@ -1,11 +1,9 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import * as response from "../../libs/response";
-import TodoModel from "./model";
+import Model from "./model";
 
-export const handle: APIGatewayProxyHandler = async (event) => {
-  const id = event.pathParameters.id
-  const result = await TodoModel.read(id)
-  
+export const handle: APIGatewayProxyHandler = async () => {
+  const result = await Model.list()
   if (result === null) {
     return response.error()
   }

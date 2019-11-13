@@ -1,18 +1,15 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import * as response from "../../libs/response";
-import TodoModel, { validate } from "./model";
+import Model from "./model";
 
 export const handle: APIGatewayProxyHandler = async (event) => {
-  const data = JSON.parse(event.body)
-
-  if (!validate(data)) {
-    return response.error(400, "Wrong input data!")
-  }
-
-  const result = await TodoModel.create(data)
+  const id = event.pathParameters.id
+  const result = await Model.delete(id)
+  
   if (result === null) {
     return response.error()
   }
 
   return response.success(result)
+
 }

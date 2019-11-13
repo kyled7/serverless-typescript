@@ -1,27 +1,16 @@
 service:
-  name: serverless-typescript
+  name: rest-crud
 
 plugins:
   - serverless-webpack
   - serverless-offline
+
 custom:
   webpack: ${file(../../common.yml):custom.webpack}
 
 provider:
   name: aws
   runtime: nodejs10.x
-  environment:
-    DYNAMODB_TABLE: ${self:service.name}-${opt:stage, self:provider.stage}
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
 functions:
   index:
@@ -29,33 +18,33 @@ functions:
     events:
       - http:
           method: get
-          path: todos
+          path: {object}
           cors: true
   create:
     handler: create.handle
     events:
       - http:
           method: post
-          path: todos
+          path: {object}
           cors: true
   read:
     handler: read.handle
     events:
       - http:
           method: get
-          path: todos/{id}
+          path: {object}/{id}
           cors: true
   update:
     handler: update.handle
     events:
       - http:
-          path: todos/{id}
+          path: {object}/{id}
           method: put
           cors: true
   delete:
     handler: delete.handle
     events:
       - http:
-          path: todos/{id}
+          path: {object}/{id}
           method: delete
           cors: true
