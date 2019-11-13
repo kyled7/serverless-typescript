@@ -4,18 +4,8 @@ service:
 plugins:
   - serverless-webpack
   - serverless-offline
-  - serverless-dynamodb-local
-
 custom:
-  dynamodb:
-    start:
-      port: 8000
-      inMemory: true
-      migrate: true
-    migration:
-      dir: offline/migrations
-    stages:
-      - dev
+  webpack: ${file(../../common.yml):custom.webpack}
 
 provider:
   name: aws
@@ -35,54 +25,37 @@ provider:
 
 functions:
   index:
-    handler: handler/todo.list
+    handler: list.handle
     events:
       - http:
           method: get
           path: todos
           cors: true
   create:
-    handler: handler/todo.create
+    handler: create.handle
     events:
       - http:
           method: post
           path: todos
           cors: true
   read:
-    handler: handler/todo.read
+    handler: read.handle
     events:
       - http:
           method: get
           path: todos/{id}
           cors: true
   update:
-    handler: handler/todo.update
+    handler: update.handle
     events:
       - http:
           path: todos/{id}
           method: put
           cors: true
   delete:
-    handler: handler/todo.deleteTodo
+    handler: delete.handle
     events:
       - http:
           path: todos/{id}
           method: delete
           cors: true
-
-resources:
-  Resources:
-    TodosDynamoDbTable:
-      Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
-      Properties:
-        AttributeDefinitions:
-          -
-            AttributeName: id
-            AttributeType: S
-        KeySchema:
-          -
-            AttributeName: id
-            KeyType: HASH
-        BillingMode: PAY_PER_REQUEST
-        TableName: ${self:provider.environment.DYNAMODB_TABLE}

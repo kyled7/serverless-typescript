@@ -1,11 +1,13 @@
 # Introduce
-Serverless RestAPI example with TypeScript, DynamoDB, offline development
+Serverless RestAPI example with TypeScript, MongoDB, offline development
 
 # Feature
+- RESTful APIs for CRUD operations
+- Microservice mono-repo approach
 - Serverless with AWS NodeJS 10.x runtime
 - TypeScript
-- DynamoDB
-- Offline + DynamoDB local
+- MongoDB
+- Serverless Offline (for development)
 
 # Rest APIs
 List `GET /todos`
@@ -23,20 +25,12 @@ Delete `DELETE /todos/{id}`
 Run following command
 
 ```
-//Install local dynamoDB
-serverless dynamodb install
-
-//Start local dynamoDB with migration
-serverless dynamodb start --migrate
-
 //Start offline serverless
 serverless offline start
 ```
 
 After start offline, you should see this information
 ```
-Dynamodb Local Started, Visit: http://localhost:8000/shell
-Serverless: DynamoDB - created table serverless-typescript-dev
 Serverless: Starting Offline: dev/us-east-1.
 
 Serverless: Routes for index:

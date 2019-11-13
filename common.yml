@@ -1,0 +1,12 @@
+custom:
+  webpack: 
+    webpackConfig: '../../webpack.config.js'
+  dynamodb: 
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+    migration:
+      dir: offline/migrations
+    stages:
+      - dev

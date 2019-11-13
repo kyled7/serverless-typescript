@@ -10,3 +10,6 @@ jspm_packages
 
 #local dynamodb directories
 .dynamodb
+
+# env variables
+**/.env
