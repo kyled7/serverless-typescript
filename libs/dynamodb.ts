@@ -1,5 +1,5 @@
 import { DynamoDB, AWSError } from "aws-sdk";
-import { ScanOutput, UpdateItemOutput } from "aws-sdk/clients/dynamodb";
+import { ScanOutput, UpdateItemOutput, GetItemOutput } from "aws-sdk/clients/dynamodb";
 import { v4 as uuid } from "uuid";
 
 export default class Dynamo {
@@ -61,7 +61,7 @@ export default class Dynamo {
           id: data.id || uuid()
         }
       })
-      this.dynamoDb.put(params, (error) => {
+      this.dynamoDb.put(params, (error: AWSError) => {
         if (error) {
           reject(error)
         }
@@ -71,10 +71,17 @@ export default class Dynamo {
   }
 
   read = async (id: string): Promise<any> => {
-    const params = this.getParams({
-      Key: { id }
+    return new Promise<any>((resolve, reject) => {
+      const params = this.getParams({
+        Key: { id }
+      })
+      this.dynamoDb.get(params, (error: AWSError, result: GetItemOutput) => {
+        if (error) {
+          reject(error)
+        }
+        resolve(result.Item)
+      })
     })
-    return this.dynamoDb.get(params)
   }
 
   update = async (id: string, data: any): Promise<any> => {

@@ -8,22 +8,23 @@
     "create-service": "node create-service"
   },
   "dependencies": {
-    "aws-sdk": "^2.553.0",
+    "aws-sdk": "^2.631.0",
     "dotenv": "^8.2.0",
+    "graphql": "^14.6.0",
     "source-map-support": "^0.5.10",
-    "uuid": "^3.3.3"
+    "uuid": "^7.0.1"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.17",
-    "@types/node": "^10.12.18",
-    "@types/uuid": "^3.4.5",
+    "@types/aws-lambda": "^8.10.46",
+    "@types/node": "^13.7.7",
+    "@types/uuid": "^7.0.0",
     "child-process": "^1.0.2",
-    "serverless-dynamodb-local": "^0.2.38",
+    "serverless-dynamodb-local": "^0.2.39",
     "serverless-offline": "^5.12.1",
     "serverless-webpack": "^5.2.0",
-    "ts-loader": "^5.3.3",
-    "typescript": "^3.2.4",
-    "webpack": "^4.29.0"
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.0"
   },
   "author": "Kyle Dinh",
   "license": "MIT"

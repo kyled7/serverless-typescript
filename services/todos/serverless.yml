@@ -70,6 +70,13 @@ functions:
           path: todos/{id}
           method: delete
           cors: true
+  graphql:
+    handler: graphql.handle
+    events:
+      - http:
+          path: todos/graphql
+          method: post
+          cors: true
 
 resources:	
   Resources:	
